@@ -1,0 +1,27 @@
+# === Node-RED / NodeJS typical ignores ===
+
+# Node modules (they can always be reinstalled)
+node_modules/
+package-lock.json
+
+# Backup flow files
+.flows.json.backup
+.flows_cred.json.backup
+*.backup
+
+# Logs / runtime cache
+*.log
+npm-debug.log*
+.red*
+
+# System config caches
+.config.*
+
+# Environment-specific data
+lib/.DS_Store
+.DS_Store
+Thumbs.db
+
+# VS Code or IDE settings (if any)
+.vscode/
+.idea/

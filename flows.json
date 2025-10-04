@@ -1,0 +1,2623 @@
+[
+    {
+        "id": "415686e5cb1123bc",
+        "type": "tab",
+        "label": "Devotee profile",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "tab-req-otp-proxy",
+        "type": "tab",
+        "label": "request_otp → internal generate_otp",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "4e3f94bc6e2686e8",
+        "type": "tab",
+        "label": "admin profile",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "511129eac45b3a08",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-dark",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#097479",
+                    "value": "#097479",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#097479",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#0eb8c0",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#555555",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#eeeeee",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#097479",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "purple",
+                "accents": "deep-purple",
+                "warn": "deep-purple",
+                "background": "orange",
+                "palette": "dark"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "tab_main",
+        "type": "ui_tab",
+        "name": "My Tab",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "grp_tab",
+        "type": "ui_group",
+        "name": "Grp My Tab 1",
+        "tab": "tab_main",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "c91329ee6d01ea9d",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /create_user",
+        "url": "/create_user",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 80,
+        "wires": [
+            [
+                "4b4259a416380c53"
+            ]
+        ]
+    },
+    {
+        "id": "4b4259a416380c53",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 370,
+        "y": 120,
+        "wires": [
+            [
+                "fdfcfc3755f844d0"
+            ]
+        ]
+    },
+    {
+        "id": "fdfcfc3755f844d0",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst name = body.name ;\nconst phone = body.phone;\n\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\n\n\nconst end_point = \"darshan_devoteee_profile.darshan_devoteee_profile.create_devoteee_user\"\n\nmsg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + end_point;\n\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { phone, name };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 120,
+        "wires": [
+            [
+                "cb1e9b48409b692f"
+            ],
+            [
+                "cd0bd72d1c6125cb"
+            ]
+        ]
+    },
+    {
+        "id": "cb1e9b48409b692f",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 810,
+        "y": 60,
+        "wires": [
+            [
+                "dc7a61e9275fb0f2"
+            ]
+        ]
+    },
+    {
+        "id": "dc7a61e9275fb0f2",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\n\n// Log the API response payload directly without parsing\n\nflow.set(\"myData\", msg.payload.message);\nvar savedData = flow.get(\"myData\");\n\n// or for global scope\n// var savedData = global.get(\"myData\");\n\n// Now you can use savedData as needed\nnode.warn(\"Saved data: \" + JSON.stringify(savedData));\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1210,
+        "y": 120,
+        "wires": [
+            [
+                "cd0bd72d1c6125cb"
+            ]
+        ]
+    },
+    {
+        "id": "cd0bd72d1c6125cb",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1410,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "d2e4c8f249fa9d55",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /verify_otp_and_get_token",
+        "url": "/verify_otp_and_get_token",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 1320,
+        "wires": [
+            [
+                "eb18e0d0a47c0305"
+            ]
+        ]
+    },
+    {
+        "id": "eb18e0d0a47c0305",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 330,
+        "y": 1400,
+        "wires": [
+            [
+                "1eadbeb3f5962219"
+            ]
+        ]
+    },
+    {
+        "id": "1eadbeb3f5962219",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst phone = body.phone;\nconst otp = body.otp;\nconst login_as = body.login_as;\n\nconst admin_url_end = \"session_admin.session_admin.verify_otp_and_get_token\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.verify_otp_and_get_token\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n}else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { phone, otp };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 1400,
+        "wires": [
+            [
+                "2869e6c176ecb29d"
+            ],
+            [
+                "94ee9e964af604e1"
+            ]
+        ]
+    },
+    {
+        "id": "2869e6c176ecb29d",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "POST → verify_otp_and_get_token",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 800,
+        "y": 1320,
+        "wires": [
+            [
+                "f729a91a54d991f8"
+            ]
+        ]
+    },
+    {
+        "id": "f729a91a54d991f8",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 1400,
+        "wires": [
+            [
+                "94ee9e964af604e1"
+            ]
+        ]
+    },
+    {
+        "id": "94ee9e964af604e1",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1240,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "2949f63bd6040e91",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "GET /get_profile",
+        "url": "/get_profile",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 320,
+        "y": 2860,
+        "wires": [
+            [
+                "52bb1449035a24c2"
+            ]
+        ]
+    },
+    {
+        "id": "52bb1449035a24c2",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 510,
+        "y": 2980,
+        "wires": [
+            [
+                "cbc9aaa892dc82c4"
+            ]
+        ]
+    },
+    {
+        "id": "cbc9aaa892dc82c4",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\n\nconst admin_url_end = \"session_admin.session_admin.get_profile\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.get_profile\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 2980,
+        "wires": [
+            [
+                "182d238b7de2b4ba"
+            ],
+            [
+                "53ccf699ddaab3ef"
+            ]
+        ]
+    },
+    {
+        "id": "182d238b7de2b4ba",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "get_profile",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 910,
+        "y": 2880,
+        "wires": [
+            [
+                "37fe62f3b9f4cedf"
+            ]
+        ]
+    },
+    {
+        "id": "37fe62f3b9f4cedf",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 2880,
+        "wires": [
+            [
+                "53ccf699ddaab3ef"
+            ]
+        ]
+    },
+    {
+        "id": "53ccf699ddaab3ef",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1460,
+        "y": 2980,
+        "wires": []
+    },
+    {
+        "id": "912eb2776fc91698",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /create_appointment",
+        "url": "/create_appointment",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 350,
+        "y": 3140,
+        "wires": [
+            [
+                "c44a552b2e127bb7"
+            ]
+        ]
+    },
+    {
+        "id": "c44a552b2e127bb7",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 510,
+        "y": 3240,
+        "wires": [
+            [
+                "73c528abfa2d5074"
+            ]
+        ]
+    },
+    {
+        "id": "73c528abfa2d5074",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\nconst details = body.details;\n\nconst admin_url_end = \"session_admin.session_admin.create_appointment\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.create_appointment\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token, details };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 3240,
+        "wires": [
+            [
+                "0735056654a7f324"
+            ],
+            [
+                "64fff181e7bfce1e"
+            ]
+        ]
+    },
+    {
+        "id": "0735056654a7f324",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "create_appointment",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 1000,
+        "y": 3120,
+        "wires": [
+            [
+                "17aa96ad68481a2c"
+            ]
+        ]
+    },
+    {
+        "id": "17aa96ad68481a2c",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 3120,
+        "wires": [
+            [
+                "64fff181e7bfce1e"
+            ]
+        ]
+    },
+    {
+        "id": "64fff181e7bfce1e",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1460,
+        "y": 3240,
+        "wires": []
+    },
+    {
+        "id": "599a2f1870f5d562",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /get_appointment_list",
+        "url": "/get_appointment_list",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 380,
+        "y": 3400,
+        "wires": [
+            [
+                "d26ee4fb266bbb3b"
+            ]
+        ]
+    },
+    {
+        "id": "d26ee4fb266bbb3b",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 550,
+        "y": 3500,
+        "wires": [
+            [
+                "07a2335ed0c9a0a9"
+            ]
+        ]
+    },
+    {
+        "id": "07a2335ed0c9a0a9",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\n\nconst admin_url_end = \"session_admin.session_admin.get_appointment_list\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.get_appointment_list\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 3500,
+        "wires": [
+            [
+                "af08df81bf24090a"
+            ],
+            [
+                "d4d5a916b2baf48a"
+            ]
+        ]
+    },
+    {
+        "id": "af08df81bf24090a",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "get_appointment_list",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 1040,
+        "y": 3380,
+        "wires": [
+            [
+                "e3a0aa79e58c8684"
+            ]
+        ]
+    },
+    {
+        "id": "e3a0aa79e58c8684",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1310,
+        "y": 3380,
+        "wires": [
+            [
+                "d4d5a916b2baf48a"
+            ]
+        ]
+    },
+    {
+        "id": "d4d5a916b2baf48a",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1500,
+        "y": 3500,
+        "wires": []
+    },
+    {
+        "id": "ab85283e4ce260e4",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /update_profile",
+        "url": "/update_profile",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 380,
+        "y": 3660,
+        "wires": [
+            [
+                "23df4b2043c63e10"
+            ]
+        ]
+    },
+    {
+        "id": "23df4b2043c63e10",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 610,
+        "y": 3780,
+        "wires": [
+            [
+                "fc07d7ae7f3060d8"
+            ]
+        ]
+    },
+    {
+        "id": "fc07d7ae7f3060d8",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\nconst info = body.info;\n\n\nconst admin_url_end = \"session_admin.session_admin.update_profile\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.update_profile\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token , info};\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 3780,
+        "wires": [
+            [
+                "3658d3cb04c60404"
+            ],
+            [
+                "58c5d528b47e1c98"
+            ]
+        ]
+    },
+    {
+        "id": "3658d3cb04c60404",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "update_profile",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 1080,
+        "y": 3660,
+        "wires": [
+            [
+                "33949509a20eb6b8"
+            ]
+        ]
+    },
+    {
+        "id": "33949509a20eb6b8",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1370,
+        "y": 3660,
+        "wires": [
+            [
+                "58c5d528b47e1c98"
+            ]
+        ]
+    },
+    {
+        "id": "58c5d528b47e1c98",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1560,
+        "y": 3780,
+        "wires": []
+    },
+    {
+        "id": "7b621719bb9f95de",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /get_list_of_appointments_admin",
+        "url": "/get_list_of_appointments_admin",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 430,
+        "y": 3920,
+        "wires": [
+            [
+                "c96ab21277e7fb77"
+            ]
+        ]
+    },
+    {
+        "id": "c96ab21277e7fb77",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 610,
+        "y": 4040,
+        "wires": [
+            [
+                "bd15eab5ea42764b"
+            ]
+        ]
+    },
+    {
+        "id": "bd15eab5ea42764b",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\nconst token =\n  (msg.req && msg.req.headers && msg.req.headers[\"auth_token\"]) || \"\";\n\nconsole.log(\"Extracted token from header:\", token);\n\n\n\n// Read query parameters 'page_length' and 'page_start'\nconst limit_start = (msg.req && msg.req.query && msg.req.query.limit_start) || null;\nconst limit_page_length = (msg.req && msg.req.query && msg.req.query.limit_page_length) || null;\n\nconsole.log(\"Extracted token from header:\", token);\nconsole.log(\"Extracted limit_start from query:\", limit_start);\nconsole.log(\"Extracted limit_page_length from query:\", limit_page_length);\n\n\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\nconst FALLBACK_AUTH = \"token 1212:1212\"; // optional fallback\nheaders[\"Authorization\"] =  FALLBACK_AUTH;\nmsg.headers = headers;\n\n\n\n\n\n// Only forward the token as payload if needed\nmsg.payload = { token, limit_start, limit_page_length };\n\nreturn [msg, null];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 4040,
+        "wires": [
+            [
+                "ea7a203520215be5"
+            ],
+            [
+                "4d2e48bcc70b47d0"
+            ]
+        ]
+    },
+    {
+        "id": "ea7a203520215be5",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "get_appointment_list",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.token.token.get_list_of_appointments_admin",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 1100,
+        "y": 3920,
+        "wires": [
+            [
+                "08dbd050610f6ef9"
+            ]
+        ]
+    },
+    {
+        "id": "08dbd050610f6ef9",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1370,
+        "y": 3920,
+        "wires": [
+            [
+                "4d2e48bcc70b47d0"
+            ]
+        ]
+    },
+    {
+        "id": "4d2e48bcc70b47d0",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1560,
+        "y": 4040,
+        "wires": []
+    },
+    {
+        "id": "12f5aa01cdf4f313",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /get_appointment",
+        "url": "/get_appointment",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 400,
+        "y": 4180,
+        "wires": [
+            [
+                "7baaa53f8654c3fd"
+            ]
+        ]
+    },
+    {
+        "id": "7baaa53f8654c3fd",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 630,
+        "y": 4300,
+        "wires": [
+            [
+                "0b6043a93eaa7828"
+            ]
+        ]
+    },
+    {
+        "id": "0b6043a93eaa7828",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\nconst appointment_id = body.appointment_id;\n\nconst admin_url_end = \"session_admin.session_admin.get_appointment\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.get_appointment\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token, appointment_id };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 4300,
+        "wires": [
+            [
+                "df2864672f978336"
+            ],
+            [
+                "1bf469b779786222"
+            ]
+        ]
+    },
+    {
+        "id": "df2864672f978336",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "get_appointment_list",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 1120,
+        "y": 4180,
+        "wires": [
+            [
+                "bc5e8b7819fd6453"
+            ]
+        ]
+    },
+    {
+        "id": "bc5e8b7819fd6453",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 4180,
+        "wires": [
+            [
+                "1bf469b779786222"
+            ]
+        ]
+    },
+    {
+        "id": "1bf469b779786222",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1580,
+        "y": 4300,
+        "wires": []
+    },
+    {
+        "id": "0d3b76d47772540e",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /request_otp",
+        "url": "/request_otp",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 1130,
+        "y": 1300,
+        "wires": [
+            [
+                "805c15797d729f94"
+            ]
+        ]
+    },
+    {
+        "id": "805c15797d729f94",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1330,
+        "y": 1320,
+        "wires": [
+            [
+                "c2efdf68d1dcc625"
+            ]
+        ]
+    },
+    {
+        "id": "c2efdf68d1dcc625",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst login_as = body.login_as ;\nconst phone = body.phone;\n\n\nconsole.log(\"phone login_as\", body, typeof(login_as), typeof(msg.url))\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\n\n\nconst admin_url_end = \"session_admin.session_admin.request_otp\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.request_otp\"\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { phone };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1550,
+        "y": 1320,
+        "wires": [
+            [
+                "d6132d59f24283f7"
+            ],
+            [
+                "cff135c82d998ac8"
+            ]
+        ]
+    },
+    {
+        "id": "d6132d59f24283f7",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "POST → generate_otp",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 1820,
+        "y": 1240,
+        "wires": [
+            [
+                "8bc80a1084673fac"
+            ]
+        ]
+    },
+    {
+        "id": "8bc80a1084673fac",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2040,
+        "y": 1320,
+        "wires": [
+            [
+                "cff135c82d998ac8"
+            ]
+        ]
+    },
+    {
+        "id": "cff135c82d998ac8",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 2240,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "5ba999161c6e851e",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /login_request",
+        "url": "/login_request",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 280,
+        "wires": [
+            [
+                "e369bf17735d0da6"
+            ]
+        ]
+    },
+    {
+        "id": "e369bf17735d0da6",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 390,
+        "y": 320,
+        "wires": [
+            [
+                "ac4ed044cb29e8ba"
+            ]
+        ]
+    },
+    {
+        "id": "ac4ed044cb29e8ba",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst profile_type = body.profile_type ;\nconst phone = body.phone;\n\n\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\n\n\nconst end_point = \"active_session.active_session._login_request\"\n\nmsg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + end_point;\n\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { phone, profile_type };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 320,
+        "wires": [
+            [
+                "5305527a8fecaa0c"
+            ],
+            [
+                "05462bcbe9c7847e"
+            ]
+        ]
+    },
+    {
+        "id": "5305527a8fecaa0c",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 830,
+        "y": 260,
+        "wires": [
+            [
+                "138f9bad54d424fc"
+            ]
+        ]
+    },
+    {
+        "id": "138f9bad54d424fc",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\n\n// Log the API response payload directly without parsing\n\nflow.set(\"login_token\", msg.payload.message);\nvar savedData = flow.get(\"login_token\");\n\n// or for global scope\n// var savedData = global.get(\"myData\");\n\n// Now you can use savedData as needed\nnode.warn(\"Saved data: \" + JSON.stringify(savedData));\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 320,
+        "wires": [
+            [
+                "05462bcbe9c7847e"
+            ]
+        ]
+    },
+    {
+        "id": "05462bcbe9c7847e",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1430,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "fb88156faf9270c4",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /login_request",
+        "url": "/login_request",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 1220,
+        "wires": [
+            [
+                "6b6765d4126c5da8"
+            ]
+        ]
+    },
+    {
+        "id": "6b6765d4126c5da8",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 330,
+        "y": 1240,
+        "wires": [
+            [
+                "96b8f3f1b8e02953"
+            ]
+        ]
+    },
+    {
+        "id": "96b8f3f1b8e02953",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst profile_type = body.profile_type ;\nconst phone = body.phone;\n\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\n\n\nconst end_point = \"active_session.active_session._login_request\"\n\nmsg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + end_point;\n\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { phone, profile_type };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1240,
+        "wires": [
+            [
+                "c23d3c6a2f8535df"
+            ],
+            [
+                "0875be6a0f4a960c"
+            ]
+        ]
+    },
+    {
+        "id": "c23d3c6a2f8535df",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 770,
+        "y": 1180,
+        "wires": [
+            [
+                "578e263350622ded"
+            ]
+        ]
+    },
+    {
+        "id": "578e263350622ded",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\n\n// Log the API response payload directly without parsing\n\nflow.set(\"login_token\", msg.payload.message);\nvar savedData = flow.get(\"login_token\");\n\n// or for global scope\n// var savedData = global.get(\"myData\");\n\n// Now you can use savedData as needed\nnode.warn(\"Saved data: \" + JSON.stringify(savedData));\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 1240,
+        "wires": [
+            [
+                "0875be6a0f4a960c"
+            ]
+        ]
+    },
+    {
+        "id": "0875be6a0f4a960c",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1370,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "05ea98e7de93d45b",
+        "type": "http in",
+        "z": "415686e5cb1123bc",
+        "name": "POST /login_request",
+        "url": "/login_request",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 500,
+        "wires": [
+            [
+                "de17737d844a94fb"
+            ]
+        ]
+    },
+    {
+        "id": "de17737d844a94fb",
+        "type": "json",
+        "z": "415686e5cb1123bc",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 410,
+        "y": 540,
+        "wires": [
+            [
+                "e05ff57ad24cf181"
+            ]
+        ]
+    },
+    {
+        "id": "e05ff57ad24cf181",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst otp = body.otp ;\n\n\nvar login_token = flow.get(\"login_token\");\n\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\n\n\nconst end_point = \"active_session.active_session._verify_login_token_and_get_session_token\"\n\nmsg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + end_point;\n\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { otp, login_token };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 540,
+        "wires": [
+            [
+                "e712cb0e9013b75b"
+            ],
+            [
+                "b49ed30bfd0870f9"
+            ]
+        ]
+    },
+    {
+        "id": "e712cb0e9013b75b",
+        "type": "http request",
+        "z": "415686e5cb1123bc",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 890,
+        "y": 480,
+        "wires": [
+            [
+                "63f03fb8b29c37fc"
+            ]
+        ]
+    },
+    {
+        "id": "63f03fb8b29c37fc",
+        "type": "function",
+        "z": "415686e5cb1123bc",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\n\n// Log the API response payload directly without parsing\n\nflow.set(\"login_token\", msg.payload.message);\nvar savedData = flow.get(\"login_token\");\n\n// or for global scope\n// var savedData = global.get(\"myData\");\n\n// Now you can use savedData as needed\nnode.warn(\"Saved data: \" + JSON.stringify(savedData));\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1250,
+        "y": 540,
+        "wires": [
+            [
+                "b49ed30bfd0870f9"
+            ]
+        ]
+    },
+    {
+        "id": "b49ed30bfd0870f9",
+        "type": "http response",
+        "z": "415686e5cb1123bc",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1450,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "in-post",
+        "type": "http in",
+        "z": "tab-req-otp-proxy",
+        "name": "POST /request_otp",
+        "url": "/request_otp",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "json-parse"
+            ]
+        ]
+    },
+    {
+        "id": "json-parse",
+        "type": "json",
+        "z": "tab-req-otp-proxy",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 350,
+        "y": 120,
+        "wires": [
+            [
+                "fn-build"
+            ]
+        ]
+    },
+    {
+        "id": "fn-build",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst login_as = body.login_as ;\nconst phone = body.phone;\n\n\nconsole.log(\"phone login_as\", body, typeof(login_as), typeof(msg.url))\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\n\n\nconst admin_url_end = \"session_admin.session_admin.request_otp\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.request_otp\"\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { phone };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 120,
+        "wires": [
+            [
+                "http-req"
+            ],
+            [
+                "out-resp"
+            ]
+        ]
+    },
+    {
+        "id": "http-req",
+        "type": "http request",
+        "z": "tab-req-otp-proxy",
+        "name": "POST → generate_otp",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 840,
+        "y": 40,
+        "wires": [
+            [
+                "fn-forward"
+            ]
+        ]
+    },
+    {
+        "id": "fn-forward",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 120,
+        "wires": [
+            [
+                "out-resp"
+            ]
+        ]
+    },
+    {
+        "id": "out-resp",
+        "type": "http response",
+        "z": "tab-req-otp-proxy",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1260,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "ec60b220241d29ba",
+        "type": "http in",
+        "z": "tab-req-otp-proxy",
+        "name": "POST /verify_otp_and_get_token",
+        "url": "/verify_otp_and_get_token",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 240,
+        "wires": [
+            [
+                "1a5e40cf983e826b"
+            ]
+        ]
+    },
+    {
+        "id": "1a5e40cf983e826b",
+        "type": "json",
+        "z": "tab-req-otp-proxy",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 330,
+        "y": 320,
+        "wires": [
+            [
+                "d4f97324f521730c"
+            ]
+        ]
+    },
+    {
+        "id": "d4f97324f521730c",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst phone = body.phone;\nconst otp = body.otp;\nconst login_as = body.login_as;\n\nconst admin_url_end = \"session_admin.session_admin.verify_otp_and_get_token\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.verify_otp_and_get_token\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n}else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { phone, otp };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 320,
+        "wires": [
+            [
+                "dafbee5d6902a276"
+            ],
+            [
+                "343be0efeaf5b050"
+            ]
+        ]
+    },
+    {
+        "id": "dafbee5d6902a276",
+        "type": "http request",
+        "z": "tab-req-otp-proxy",
+        "name": "POST → verify_otp_and_get_token",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 800,
+        "y": 240,
+        "wires": [
+            [
+                "dd6b7397b3ba731c"
+            ]
+        ]
+    },
+    {
+        "id": "dd6b7397b3ba731c",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 320,
+        "wires": [
+            [
+                "343be0efeaf5b050"
+            ]
+        ]
+    },
+    {
+        "id": "343be0efeaf5b050",
+        "type": "http response",
+        "z": "tab-req-otp-proxy",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1240,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "92fd3fd07c9e34f8",
+        "type": "http in",
+        "z": "tab-req-otp-proxy",
+        "name": "GET /get_profile",
+        "url": "/get_profile",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 440,
+        "wires": [
+            [
+                "6b6879ea114145b2"
+            ]
+        ]
+    },
+    {
+        "id": "6b6879ea114145b2",
+        "type": "json",
+        "z": "tab-req-otp-proxy",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 330,
+        "y": 560,
+        "wires": [
+            [
+                "077517a033bdc35d"
+            ]
+        ]
+    },
+    {
+        "id": "077517a033bdc35d",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\n\nconst admin_url_end = \"session_admin.session_admin.get_profile\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.get_profile\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 560,
+        "wires": [
+            [
+                "a88f7fc8e83048ae"
+            ],
+            [
+                "bcc5c6835eff136e"
+            ]
+        ]
+    },
+    {
+        "id": "a88f7fc8e83048ae",
+        "type": "http request",
+        "z": "tab-req-otp-proxy",
+        "name": "get_profile",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 730,
+        "y": 460,
+        "wires": [
+            [
+                "251940777e6d1a42"
+            ]
+        ]
+    },
+    {
+        "id": "251940777e6d1a42",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1090,
+        "y": 460,
+        "wires": [
+            [
+                "bcc5c6835eff136e"
+            ]
+        ]
+    },
+    {
+        "id": "bcc5c6835eff136e",
+        "type": "http response",
+        "z": "tab-req-otp-proxy",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1280,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "ee0119e7262836f0",
+        "type": "http in",
+        "z": "tab-req-otp-proxy",
+        "name": "POST /create_appointment",
+        "url": "/create_appointment",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 720,
+        "wires": [
+            [
+                "dfc0752d8d0bce96"
+            ]
+        ]
+    },
+    {
+        "id": "dfc0752d8d0bce96",
+        "type": "json",
+        "z": "tab-req-otp-proxy",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 330,
+        "y": 820,
+        "wires": [
+            [
+                "53e013808088428d"
+            ]
+        ]
+    },
+    {
+        "id": "53e013808088428d",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\nconst details = body.details;\n\nconst admin_url_end = \"session_admin.session_admin.create_appointment\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.create_appointment\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token, details };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 820,
+        "wires": [
+            [
+                "91e6b22e9d2ae519"
+            ],
+            [
+                "bc400f07a507af3d"
+            ]
+        ]
+    },
+    {
+        "id": "91e6b22e9d2ae519",
+        "type": "http request",
+        "z": "tab-req-otp-proxy",
+        "name": "create_appointment",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 820,
+        "y": 700,
+        "wires": [
+            [
+                "859c3ebc5c4e10ea"
+            ]
+        ]
+    },
+    {
+        "id": "859c3ebc5c4e10ea",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1090,
+        "y": 700,
+        "wires": [
+            [
+                "bc400f07a507af3d"
+            ]
+        ]
+    },
+    {
+        "id": "bc400f07a507af3d",
+        "type": "http response",
+        "z": "tab-req-otp-proxy",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1280,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "0eefb2f45025a28f",
+        "type": "http in",
+        "z": "tab-req-otp-proxy",
+        "name": "POST /get_appointment_list",
+        "url": "/get_appointment_list",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 980,
+        "wires": [
+            [
+                "f7de36ee17107d2c"
+            ]
+        ]
+    },
+    {
+        "id": "f7de36ee17107d2c",
+        "type": "json",
+        "z": "tab-req-otp-proxy",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 370,
+        "y": 1080,
+        "wires": [
+            [
+                "071b313fd286e5ee"
+            ]
+        ]
+    },
+    {
+        "id": "071b313fd286e5ee",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\n\nconst admin_url_end = \"session_admin.session_admin.get_appointment_list\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.get_appointment_list\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 1080,
+        "wires": [
+            [
+                "1f53c5eb3aa03db1"
+            ],
+            [
+                "118475c967a28e7e"
+            ]
+        ]
+    },
+    {
+        "id": "1f53c5eb3aa03db1",
+        "type": "http request",
+        "z": "tab-req-otp-proxy",
+        "name": "get_appointment_list",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 860,
+        "y": 960,
+        "wires": [
+            [
+                "6e46a5f031cf99c5"
+            ]
+        ]
+    },
+    {
+        "id": "6e46a5f031cf99c5",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 960,
+        "wires": [
+            [
+                "118475c967a28e7e"
+            ]
+        ]
+    },
+    {
+        "id": "118475c967a28e7e",
+        "type": "http response",
+        "z": "tab-req-otp-proxy",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1320,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "b51734c1139f7fa1",
+        "type": "http in",
+        "z": "tab-req-otp-proxy",
+        "name": "POST /update_profile",
+        "url": "/update_profile",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 1240,
+        "wires": [
+            [
+                "05d450b37790f7ec"
+            ]
+        ]
+    },
+    {
+        "id": "05d450b37790f7ec",
+        "type": "json",
+        "z": "tab-req-otp-proxy",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 430,
+        "y": 1360,
+        "wires": [
+            [
+                "3f9ba397678c8659"
+            ]
+        ]
+    },
+    {
+        "id": "3f9ba397678c8659",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\nconst info = body.info;\n\n\nconst admin_url_end = \"session_admin.session_admin.update_profile\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.update_profile\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token , info};\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 1360,
+        "wires": [
+            [
+                "d873cc98e6935cc3"
+            ],
+            [
+                "39368c8d6f8f9bc6"
+            ]
+        ]
+    },
+    {
+        "id": "d873cc98e6935cc3",
+        "type": "http request",
+        "z": "tab-req-otp-proxy",
+        "name": "update_profile",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 900,
+        "y": 1240,
+        "wires": [
+            [
+                "0c4370a1c61fc37d"
+            ]
+        ]
+    },
+    {
+        "id": "0c4370a1c61fc37d",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1190,
+        "y": 1240,
+        "wires": [
+            [
+                "39368c8d6f8f9bc6"
+            ]
+        ]
+    },
+    {
+        "id": "39368c8d6f8f9bc6",
+        "type": "http response",
+        "z": "tab-req-otp-proxy",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1380,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "6752daca8d33c55e",
+        "type": "http in",
+        "z": "tab-req-otp-proxy",
+        "name": "POST /get_list_of_appointments_admin",
+        "url": "/get_list_of_appointments_admin",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 250,
+        "y": 1500,
+        "wires": [
+            [
+                "a395c0efab86c601"
+            ]
+        ]
+    },
+    {
+        "id": "a395c0efab86c601",
+        "type": "json",
+        "z": "tab-req-otp-proxy",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 430,
+        "y": 1620,
+        "wires": [
+            [
+                "b912e410c17a2c5f"
+            ]
+        ]
+    },
+    {
+        "id": "b912e410c17a2c5f",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\nconst token =\n  (msg.req && msg.req.headers && msg.req.headers[\"auth_token\"]) || \"\";\n\nconsole.log(\"Extracted token from header:\", token);\n\n\n\n// Read query parameters 'page_length' and 'page_start'\nconst limit_start = (msg.req && msg.req.query && msg.req.query.limit_start) || null;\nconst limit_page_length = (msg.req && msg.req.query && msg.req.query.limit_page_length) || null;\n\nconsole.log(\"Extracted token from header:\", token);\nconsole.log(\"Extracted limit_start from query:\", limit_start);\nconsole.log(\"Extracted limit_page_length from query:\", limit_page_length);\n\n\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\nconst FALLBACK_AUTH = \"token 1212:1212\"; // optional fallback\nheaders[\"Authorization\"] =  FALLBACK_AUTH;\nmsg.headers = headers;\n\n\n\n\n\n// Only forward the token as payload if needed\nmsg.payload = { token, limit_start, limit_page_length };\n\nreturn [msg, null];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 1620,
+        "wires": [
+            [
+                "b5c0bfa21a48b190"
+            ],
+            [
+                "565c8427a768a6db"
+            ]
+        ]
+    },
+    {
+        "id": "b5c0bfa21a48b190",
+        "type": "http request",
+        "z": "tab-req-otp-proxy",
+        "name": "get_appointment_list",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.token.token.get_list_of_appointments_admin",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 920,
+        "y": 1500,
+        "wires": [
+            [
+                "2a14bd7dab12adf7"
+            ]
+        ]
+    },
+    {
+        "id": "2a14bd7dab12adf7",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1190,
+        "y": 1500,
+        "wires": [
+            [
+                "565c8427a768a6db"
+            ]
+        ]
+    },
+    {
+        "id": "565c8427a768a6db",
+        "type": "http response",
+        "z": "tab-req-otp-proxy",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1380,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "4ee78cdcd4c93f6a",
+        "type": "http in",
+        "z": "tab-req-otp-proxy",
+        "name": "POST /get_appointment",
+        "url": "/get_appointment",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 1760,
+        "wires": [
+            [
+                "10250f84f0d22206"
+            ]
+        ]
+    },
+    {
+        "id": "10250f84f0d22206",
+        "type": "json",
+        "z": "tab-req-otp-proxy",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 450,
+        "y": 1880,
+        "wires": [
+            [
+                "f957390efd98ce1e"
+            ]
+        ]
+    },
+    {
+        "id": "f957390efd98ce1e",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst token = body.token;\nconst login_as = body.login_as;\nconst appointment_id = body.appointment_id;\n\nconst admin_url_end = \"session_admin.session_admin.get_appointment\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.get_appointment\"\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { token, appointment_id };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1880,
+        "wires": [
+            [
+                "435f1b8a81145e70"
+            ],
+            [
+                "816d69d6a904268a"
+            ]
+        ]
+    },
+    {
+        "id": "435f1b8a81145e70",
+        "type": "http request",
+        "z": "tab-req-otp-proxy",
+        "name": "get_appointment_list",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 940,
+        "y": 1760,
+        "wires": [
+            [
+                "2c0de10b20bf2e83"
+            ]
+        ]
+    },
+    {
+        "id": "2c0de10b20bf2e83",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1210,
+        "y": 1760,
+        "wires": [
+            [
+                "816d69d6a904268a"
+            ]
+        ]
+    },
+    {
+        "id": "816d69d6a904268a",
+        "type": "http response",
+        "z": "tab-req-otp-proxy",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1400,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "255b9943c1ca0555",
+        "type": "http in",
+        "z": "tab-req-otp-proxy",
+        "name": "POST /request_otp",
+        "url": "/request_otp",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 1130,
+        "y": 220,
+        "wires": [
+            [
+                "6ce68407c8544455"
+            ]
+        ]
+    },
+    {
+        "id": "6ce68407c8544455",
+        "type": "json",
+        "z": "tab-req-otp-proxy",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1330,
+        "y": 240,
+        "wires": [
+            [
+                "9eb3a319f3c39e48"
+            ]
+        ]
+    },
+    {
+        "id": "9eb3a319f3c39e48",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Build downstream request",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst login_as = body.login_as ;\nconst phone = body.phone;\n\n\nconsole.log(\"phone login_as\", body, typeof(login_as), typeof(msg.url))\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\n\n\nconst admin_url_end = \"session_admin.session_admin.request_otp\"\nconst devotee_url_end = \"session_devoteee.session_devoteee.request_otp\"\n\nif (login_as === \"Admin\") {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + admin_url_end\n\n} else {\n  msg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + devotee_url_end\n}\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { phone };\n\nreturn [msg];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1550,
+        "y": 240,
+        "wires": [
+            [
+                "562249473035969c"
+            ],
+            [
+                "9deefc9c64d72d78"
+            ]
+        ]
+    },
+    {
+        "id": "562249473035969c",
+        "type": "http request",
+        "z": "tab-req-otp-proxy",
+        "name": "POST → generate_otp",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 1820,
+        "y": 160,
+        "wires": [
+            [
+                "5e28122868023c6d"
+            ]
+        ]
+    },
+    {
+        "id": "5e28122868023c6d",
+        "type": "function",
+        "z": "tab-req-otp-proxy",
+        "name": "Forward status & JSON",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2040,
+        "y": 240,
+        "wires": [
+            [
+                "9deefc9c64d72d78"
+            ]
+        ]
+    },
+    {
+        "id": "9deefc9c64d72d78",
+        "type": "http response",
+        "z": "tab-req-otp-proxy",
+        "name": "HTTP response",
+        "statusCode": "",
+        "headers": {},
+        "x": 2240,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "919fbca7c4381220",
+        "type": "ui_form",
+        "z": "4e3f94bc6e2686e8",
+        "name": "User form",
+        "label": "Create user",
+        "group": "grp_tab",
+        "order": 1,
+        "width": "0",
+        "height": "0",
+        "options": [
+            {
+                "label": "Name",
+                "value": "name",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Phone",
+                "value": "phone",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "name": "",
+            "phone": ""
+        },
+        "payload": "",
+        "submit": "Submit",
+        "cancel": "",
+        "topic": "",
+        "topicType": "str",
+        "splitLayout": false,
+        "className": "",
+        "x": 320,
+        "y": 440,
+        "wires": [
+            [
+                "0442634df8528067"
+            ]
+        ]
+    },
+    {
+        "id": "0442634df8528067",
+        "type": "function",
+        "z": "4e3f94bc6e2686e8",
+        "name": "Build POST to /create_user",
+        "func": "const data = msg.payload || {};\nmsg.headers = { 'Content-Type':'application/json' };\nmsg.payload = data; // object {name, phone}\n// Change host if your http-in is remote\nmsg.url = 'http://127.0.0.1:1880/create_user';\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 440,
+        "wires": [
+            [
+                "14faab14893c5079"
+            ]
+        ]
+    },
+    {
+        "id": "14faab14893c5079",
+        "type": "http request",
+        "z": "4e3f94bc6e2686e8",
+        "name": "POST /create_user",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 820,
+        "y": 440,
+        "wires": [
+            [
+                "2ede462a6077aa7b"
+            ]
+        ]
+    },
+    {
+        "id": "2ede462a6077aa7b",
+        "type": "function",
+        "z": "4e3f94bc6e2686e8",
+        "name": "Format server response",
+        "func": "/* msg.payload is the HTTP response body (parsed if ret=obj)\n   Adapt based on what your HTTP flow returns. Example assumes\n   msg.payload.message contains the useful string. */\nlet body = msg.payload || {};\nlet text = '';\nif (typeof body === 'object') {\n    // try common fields\n    text = body.message || body.result || JSON.stringify(body);\n} else {\n    text = String(body);\n}\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 440,
+        "wires": [
+            [
+                "32d755f3bd667ce0"
+            ]
+        ]
+    },
+    {
+        "id": "32d755f3bd667ce0",
+        "type": "ui_template",
+        "z": "4e3f94bc6e2686e8",
+        "group": "grp_tab",
+        "name": "Display API result",
+        "order": 2,
+        "width": "0",
+        "height": "0",
+        "format": "<div style=\"font-size:15px;line-height:1.4;color:#fff;\"><p ng-bind-html=\"msg.payload\"></p></div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "className": "",
+        "x": 1320,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    }
+]
