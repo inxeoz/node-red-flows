@@ -23,6 +23,14 @@
         "env": []
     },
     {
+        "id": "1dc44175b2bd6ff0",
+        "type": "tab",
+        "label": "Devotee User UI",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "511129eac45b3a08",
         "type": "ui_base",
         "theme": {
@@ -123,14 +131,45 @@
     {
         "id": "tab_main",
         "type": "ui_tab",
-        "name": "My Tab",
+        "name": "Create Devotee",
         "icon": "dashboard",
-        "order": 1
+        "order": 1,
+        "disabled": false,
+        "hidden": false
     },
     {
-        "id": "grp_tab",
+        "id": "6e33ce41e047a8b9",
         "type": "ui_group",
-        "name": "Grp My Tab 1",
+        "name": "Verify Form",
+        "tab": "1b42a98937320bba",
+        "order": 3,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "88072e4b2b78e8a4",
+        "type": "ui_tab",
+        "name": "Login Devotee",
+        "icon": "dashboard",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "1b42a98937320bba",
+        "type": "ui_tab",
+        "name": "Verify Otp",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "f6dac59f01e23aa8",
+        "type": "ui_group",
+        "name": "Create Devotee",
         "tab": "tab_main",
         "order": 1,
         "disp": true,
@@ -1374,8 +1413,8 @@
         "id": "05ea98e7de93d45b",
         "type": "http in",
         "z": "415686e5cb1123bc",
-        "name": "POST /login_request",
-        "url": "/login_request",
+        "name": "POST /verify_login",
+        "url": "/verify_login",
         "method": "post",
         "upload": false,
         "skipBodyParsing": false,
@@ -1409,7 +1448,7 @@
         "type": "function",
         "z": "415686e5cb1123bc",
         "name": "Build downstream request",
-        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst otp = body.otp ;\n\n\nvar login_token = flow.get(\"login_token\");\n\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\n\n\nconst end_point = \"active_session.active_session._verify_login_token_and_get_session_token\"\n\nmsg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + end_point;\n\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { otp, login_token };\n\nreturn [msg];\n",
+        "func": "// Read custom header 'auth_token'\n\n\n\nlet body = JSON.parse(msg.payload);\nconst otp = body.otp ;\nconst login_token = body.login_token;\n\nconsole.log(\"llogin tokn\" + JSON.stringify(login_token))\n\n// var login_token = flow.get(\"login_token\");\n\n\n// Build headers for outbound request\nconst headers = {\n  \"Content-Type\": \"application/json\",\n};\n\n\n\nconst end_point = \"active_session.active_session._verify_login_token_and_get_session_token\"\n\nmsg.url = \"http://127.0.0.1:8001/api/method/mahakaal.darshan_booking.doctype.\" + end_point;\n\n\nheaders[\"Authorization\"] = \"token 1212:1212\"; // optional fallback\n\nmsg.headers = headers;\n\n// Only forward the token as payload if needed\nmsg.payload = { otp, login_token };\n\nreturn [msg];\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -1456,7 +1495,7 @@
         "type": "function",
         "z": "415686e5cb1123bc",
         "name": "Forward status & JSON",
-        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\n\n// Log the API response payload directly without parsing\n\nflow.set(\"login_token\", msg.payload.message);\nvar savedData = flow.get(\"login_token\");\n\n// or for global scope\n// var savedData = global.get(\"myData\");\n\n// Now you can use savedData as needed\nnode.warn(\"Saved data: \" + JSON.stringify(savedData));\n\n\nreturn msg;",
+        "func": "msg.headers = Object.assign({}, msg.headers, { \"Content-Type\": \"application/json\" });\n// Keep upstream status if present; default 200\nmsg.statusCode = msg.statusCode || 200;\n\n// Log the API response payload directly without parsing\n\nflow.set(\"session_token\", msg.payload.message);\nvar session_token = flow.get(\"session_token\");\n\n// or for global scope\n// var savedData = global.get(\"myData\");\n\n// Now you can use savedData as needed\nnode.warn(\"Saved data: \" + JSON.stringify(session_token));\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2493,13 +2532,13 @@
     {
         "id": "919fbca7c4381220",
         "type": "ui_form",
-        "z": "4e3f94bc6e2686e8",
+        "z": "1dc44175b2bd6ff0",
         "name": "User form",
         "label": "Create user",
-        "group": "grp_tab",
+        "group": "f6dac59f01e23aa8",
         "order": 1,
-        "width": "0",
-        "height": "0",
+        "width": 0,
+        "height": 0,
         "options": [
             {
                 "label": "Name",
@@ -2527,8 +2566,8 @@
         "topicType": "str",
         "splitLayout": false,
         "className": "",
-        "x": 320,
-        "y": 440,
+        "x": 140,
+        "y": 120,
         "wires": [
             [
                 "0442634df8528067"
@@ -2538,17 +2577,17 @@
     {
         "id": "0442634df8528067",
         "type": "function",
-        "z": "4e3f94bc6e2686e8",
+        "z": "1dc44175b2bd6ff0",
         "name": "Build POST to /create_user",
-        "func": "const data = msg.payload || {};\nmsg.headers = { 'Content-Type':'application/json' };\nmsg.payload = data; // object {name, phone}\n// Change host if your http-in is remote\nmsg.url = 'http://127.0.0.1:1880/create_user';\nreturn msg;",
+        "func": "const data = msg.payload || {};\nflow.set(\"phone\", data.phone);       // <-- add this line\nmsg.headers = { 'Content-Type':'application/json' };\nmsg.payload = data; // object {name, phone}\n// Change host if your http-in is remote\nmsg.url = 'http://127.0.0.1:1880/create_user';\nreturn msg;\n\n\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 580,
-        "y": 440,
+        "x": 400,
+        "y": 120,
         "wires": [
             [
                 "14faab14893c5079"
@@ -2558,7 +2597,7 @@
     {
         "id": "14faab14893c5079",
         "type": "http request",
-        "z": "4e3f94bc6e2686e8",
+        "z": "1dc44175b2bd6ff0",
         "name": "POST /create_user",
         "method": "POST",
         "ret": "obj",
@@ -2571,8 +2610,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 820,
-        "y": 440,
+        "x": 640,
+        "y": 120,
         "wires": [
             [
                 "2ede462a6077aa7b"
@@ -2582,17 +2621,17 @@
     {
         "id": "2ede462a6077aa7b",
         "type": "function",
-        "z": "4e3f94bc6e2686e8",
+        "z": "1dc44175b2bd6ff0",
         "name": "Format server response",
-        "func": "/* msg.payload is the HTTP response body (parsed if ret=obj)\n   Adapt based on what your HTTP flow returns. Example assumes\n   msg.payload.message contains the useful string. */\nlet body = msg.payload || {};\nlet text = '';\nif (typeof body === 'object') {\n    // try common fields\n    text = body.message || body.result || JSON.stringify(body);\n} else {\n    text = String(body);\n}\nmsg.payload = text;\nreturn msg;",
+        "func": "let message = msg.payload.message;\n\nnode.warn(\"Saved data: \" + JSON.stringify(message));\n\n// if (message.login_token == null) {\n//     // msg.payload = message.err;\n//     msg.payload = message;\n\n// } else {\n    msg.payload = message;\n// }\n\n\n\nif (message.login_token ) {\n\n\n    flow.set(\"login_token\", message.login_token);\n    var login_token = flow.get(\"login_token\");\n\n    node.warn(\"login_token data: \" + login_token);\n\n}\n\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1060,
-        "y": 440,
+        "x": 880,
+        "y": 120,
         "wires": [
             [
                 "32d755f3bd667ce0"
@@ -2602,22 +2641,187 @@
     {
         "id": "32d755f3bd667ce0",
         "type": "ui_template",
-        "z": "4e3f94bc6e2686e8",
-        "group": "grp_tab",
+        "z": "1dc44175b2bd6ff0",
+        "group": "f6dac59f01e23aa8",
         "name": "Display API result",
         "order": 2,
-        "width": "0",
-        "height": "0",
-        "format": "<div style=\"font-size:15px;line-height:1.4;color:#fff;\"><p ng-bind-html=\"msg.payload\"></p></div>",
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size:15px; line-height:1.4; color:#fff;\">\n    <p>\n        {{ msg.payload.err ? \"You got error: \" + msg.payload.err : (msg.payload.login_token ? \"You got token\" : \"You got\n        nothing\") }}\n    </p>\n\n    <script>\n        (function(scope) {\n      scope.$watch('msg', function(msg) {\n        if(msg && msg.payload && msg.payload.login_token) {\n          window.location.href = \"http://127.0.0.1:1880/ui/#!/1\";\n        }\n      });\n    })(scope);\n    </script>\n</div>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": false,
         "templateScope": "local",
         "className": "",
-        "x": 1320,
-        "y": 440,
+        "x": 1140,
+        "y": 120,
+        "wires": [
+            [
+                "019f6955a28a07b4"
+            ]
+        ]
+    },
+    {
+        "id": "3b376c36ee0abebf",
+        "type": "ui_form",
+        "z": "1dc44175b2bd6ff0",
+        "name": "Login verify",
+        "label": "Enter Otp",
+        "group": "6e33ce41e047a8b9",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "otp",
+                "value": "otp",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "otp": ""
+        },
+        "payload": "",
+        "submit": "Submit",
+        "cancel": "",
+        "topic": "",
+        "topicType": "str",
+        "splitLayout": false,
+        "className": "",
+        "x": 160,
+        "y": 340,
+        "wires": [
+            [
+                "f4de350358041fa1"
+            ]
+        ]
+    },
+    {
+        "id": "f4de350358041fa1",
+        "type": "function",
+        "z": "1dc44175b2bd6ff0",
+        "name": "Build POST to /Login verify",
+        "func": "const data = msg.payload || {};\n\nvar login_token = flow.get(\"login_token\");\ndata.login_token = login_token;\n\nmsg.payload = data; // object {login_token, otp}\n\nconsole.log(\"some +++\", msg.payload)\n\nmsg.headers = { 'Content-Type': 'application/json' };\n// Change host if your http-in is remote\nmsg.url = 'http://127.0.0.1:1880/verify_login';\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 340,
+        "wires": [
+            [
+                "45229dac28858217"
+            ]
+        ]
+    },
+    {
+        "id": "45229dac28858217",
+        "type": "http request",
+        "z": "1dc44175b2bd6ff0",
+        "name": "POST /login_request",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 640,
+        "y": 340,
+        "wires": [
+            [
+                "265f8d12e4e2d32e"
+            ]
+        ]
+    },
+    {
+        "id": "265f8d12e4e2d32e",
+        "type": "function",
+        "z": "1dc44175b2bd6ff0",
+        "name": "Format server response",
+        "func": "let message = msg.payload.message;\n\nnode.warn(\"Saved data: \" + message);\n\n\nmsg.payload = message;\n\nif (message.session_token ) {\n\n    flow.set(\"session_token\", JSON.stringify(message.session_token));\n    var session_token = flow.get(\"session_token\");\n\n    node.warn(\"login_token data: \" + session_token);\n\n}\n\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 340,
+        "wires": [
+            [
+                "e0e2c7e65655beda"
+            ]
+        ]
+    },
+    {
+        "id": "e0e2c7e65655beda",
+        "type": "ui_template",
+        "z": "1dc44175b2bd6ff0",
+        "group": "6e33ce41e047a8b9",
+        "name": "Display API result",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size:15px; line-height:1.4; color:#fff;\">\n    <p>\n        {{ msg.payload.err ? \"You got error: \" + msg.payload.err : (msg.payload.session_token ? \"You got token: \" +\n        msg.payload.session_token : \"You got nothing\") }}\n    </p>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "className": "",
+        "x": 1130,
+        "y": 340,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "258aaa9455caf4eb",
+        "type": "ui_text",
+        "z": "1dc44175b2bd6ff0",
+        "group": "6e33ce41e047a8b9",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Phone",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 410,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "019f6955a28a07b4",
+        "type": "function",
+        "z": "1dc44175b2bd6ff0",
+        "name": "Format server response",
+        "func": "var phone = flow.get(\"phone\");\n\n\nmsg.payload = phone;\n\n   \n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 190,
+        "y": 280,
+        "wires": [
+            [
+                "258aaa9455caf4eb"
+            ]
         ]
     }
 ]
